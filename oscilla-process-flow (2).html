@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oscilla: How It Works - Process Flow</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .swimlane-container {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .swimlane {
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .swimlane:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        
+        .swimlane-header {
+            padding: 20px 30px;
+            font-weight: 700;
+            font-size: 1.3em;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .enterprise { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .oscilla { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .customer { background: linear-gradient(135deg, #27ae60, #229954); }
+        .defi { background: linear-gradient(135deg, #f39c12, #d68910); }
+        
+        .swimlane-content {
+            padding: 25px 30px;
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .process-step:hover {
+            background: #e8f4fd;
+            transform: translateX(10px);
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #5a6c7d;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            padding: 15px;
+            color: #3498db;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        
+        .key-benefits {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 30px;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+        
+        .key-benefits h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .benefit {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+        }
+        
+        .benefit p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .swimlane-container {
+                padding: 20px;
+            }
+            
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Oscilla: How It Works</h1>
+            <p>"Stripe for Crypto Rewards" - Enterprise Infrastructure Process Flow</p>
+        </div>
+        
+        <div class="swimlane-container">
+            <!-- Enterprise Swimlane -->
+            <div class="swimlane">
+                <div class="swimlane-header enterprise">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+                    </svg>
+                    Enterprise (Credit Unions, Banks, Fortune 1000)
+                </div>
+                <div class="swimlane-content">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Initial Setup & Integration</div>
+                            <div class="step-description">Enterprise deposits USDC into Oscilla-managed treasury and integrates with existing systems (core banking APIs, card processors, employee systems)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <div class="step-title">Reward Triggering</div>
+                            <div class="step-description">Triggers rewards based on customer activity (card transactions, account milestones) or employee achievements (performance, tenure)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">10</div>
+                        <div class="step-content">
+                            <div class="step-title">Compliance & Reporting</div>
+                            <div class="step-description">Receives automated compliance reports, tax documentation, and treasury performance analytics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇</div>
+            
+            <!-- Oscilla Platform Swimlane -->
+            <div class="swimlane">
+                <div class="swimlane-header oscilla">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21.99 4c0-1.1-.89-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18zM18 14H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                    </svg>
+                    Oscilla Platform (Core Infrastructure)
+                </div>
+                <div class="swimlane-content">
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Treasury Management</div>
+                            <div class="step-description">Manages USDC deposits through institutional DeFi yield strategies (4-6% returns) while maintaining compliance and security</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <div class="step-title">API Integration Layer</div>
+                            <div class="step-description">Processes reward triggers via APIs, manages user accounts through Privy wallet abstraction</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">7</div>
+                        <div class="step-content">
+                            <div class="step-title">Token Conversion & Distribution</div>
+                            <div class="step-description">Automatically converts USDC to desired crypto tokens (BTC, ETH, SOL) and distributes to customer/employee accounts</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">9</div>
+                        <div class="step-content">
+                            <div class="step-title">Compliance Automation</div>
+                            <div class="step-description">Handles AML monitoring, tax reporting, and regulatory compliance automatically through integrated partners</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇</div>
+            
+            <!-- DeFi & Infrastructure Swimlane -->
+            <div class="swimlane">
+                <div class="swimlane-header defi">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                    </svg>
+                    DeFi & Infrastructure Partners
+                </div>
+                <div class="swimlane-content">
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Yield Generation</div>
+                            <div class="step-description">USDC deployed to institutional DeFi protocols and lending venues to generate stable yields</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">8</div>
+                        <div class="step-content">
+                            <div class="step-title">Token Swaps & Custody</div>
+                            <div class="step-description">Jupiter, 0x, 1inch APIs for token conversion; Fireblocks/Coinbase for institutional custody and security</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flow-arrow">⬇</div>
+            
+            <!-- Customer/Employee Swimlane -->
+            <div class="swimlane">
+                <div class="swimlane-header customer">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    Customers & Employees
+                </div>
+                <div class="swimlane-content">
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Seamless Onboarding</div>
+                            <div class="step-description">Sign up with email only (via Privy) - no crypto wallet setup required, rewards automatically tied to account</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">11</div>
+                        <div class="step-content">
+                            <div class="step-title">Reward Management</div>
+                            <div class="step-description">View, claim, transfer, or compound crypto rewards through simple dashboard - no exchange account needed</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="key-benefits">
+                <h3>🚀 Key System Benefits</h3>
+                <div class="benefits-grid">
+                    <div class="benefit">
+                        <h4>Zero Volatility Risk</h4>
+                        <p>USDC treasury eliminates crypto volatility concerns for enterprises while still offering crypto rewards</p>
+                    </div>
+                    <div class="benefit">
+                        <h4>Compliance Ready</h4>
+                        <p>Automated AML, tax reporting, and regulatory compliance built into the platform</p>
+                    </div>
+                    <div class="benefit">
+                        <h4>Simple Integration</h4>
+                        <p>Plug-and-play APIs integrate with existing banking, card, and HR systems</p>
+                    </div>
+                    <div class="benefit">
+                        <h4>Enhanced UX</h4>
+                        <p>Email-based signup eliminates crypto complexity while maintaining security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
